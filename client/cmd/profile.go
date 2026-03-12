@@ -36,6 +36,12 @@ var profileAddCmd = &cobra.Command{
 	RunE:  addProfileFunc,
 }
 
+var profileManagementURL string
+
+func init() {
+	profileAddCmd.Flags().StringVar(&profileManagementURL, "management-url", "", "Management URL for this profile (defaults to the NetBird cloud)")
+}
+
 var profileRemoveCmd = &cobra.Command{
 	Use:   "remove <profile_name>",
 	Short: "Remove a profile",
@@ -125,8 +131,9 @@ func addProfileFunc(cmd *cobra.Command, args []string) error {
 	profileName := args[0]
 
 	_, err = daemonClient.AddProfile(cmd.Context(), &proto.AddProfileRequest{
-		ProfileName: profileName,
-		Username:    currUser.Username,
+		ProfileName:   profileName,
+		Username:      currUser.Username,
+		ManagementUrl: profileManagementURL,
 	})
 	if err != nil {
 		return err

@@ -4456,6 +4456,7 @@ type AddProfileRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
 	ProfileName   string                 `protobuf:"bytes,2,opt,name=profileName,proto3" json:"profileName,omitempty"`
+	ManagementUrl string                 `protobuf:"bytes,3,opt,name=managementUrl,proto3" json:"managementUrl,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4500,6 +4501,13 @@ func (x *AddProfileRequest) GetUsername() string {
 func (x *AddProfileRequest) GetProfileName() string {
 	if x != nil {
 		return x.ProfileName
+	}
+	return ""
+}
+
+func (x *AddProfileRequest) GetManagementUrl() string {
+	if x != nil {
+		return x.ManagementUrl
 	}
 	return ""
 }

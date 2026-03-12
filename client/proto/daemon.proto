@@ -680,6 +680,7 @@ message SetConfigResponse{}
 message AddProfileRequest {
   string username = 1;
   string profileName = 2;
+  string managementUrl = 3;
 }
 
 message AddProfileResponse {}

@@ -178,8 +178,13 @@ func (s *serviceClient) showProfilesUI() {
 	newBtn := widget.NewButton("New Profile", func() {
 		nameEntry := widget.NewEntry()
 		nameEntry.SetPlaceHolder("Enter Profile Name")
+		mgmtURLEntry := widget.NewEntry()
+		mgmtURLEntry.SetPlaceHolder("https://api.netbird.io:443 (default)")
 
-		formItems := []*widget.FormItem{{Text: "Name:", Widget: nameEntry}}
+		formItems := []*widget.FormItem{
+			{Text: "Name:", Widget: nameEntry},
+			{Text: "Management URL:", Widget: mgmtURLEntry},
+		}
 		dlg := dialog.NewForm(
 			"New Profile",
 			"Create",
@@ -196,7 +201,7 @@ func (s *serviceClient) showProfilesUI() {
 				}
 
 				// add profile
-				err = s.addProfile(name)
+				err = s.addProfile(name, mgmtURLEntry.Text)
 				if err != nil {
 					log.Errorf("failed to create profile: %v", err)
 					dialog.ShowError(fmt.Errorf("failed to create profile"), s.wProfiles)
@@ -213,7 +218,7 @@ func (s *serviceClient) showProfilesUI() {
 			s.wProfiles,
 		)
 		// make dialog wider
-		dlg.Resize(fyne.NewSize(350, 150))
+		dlg.Resize(fyne.NewSize(450, 200))
 		dlg.Show()
 	})
 
@@ -227,7 +232,7 @@ func (s *serviceClient) showProfilesUI() {
 	s.wProfiles.Show()
 }
 
-func (s *serviceClient) addProfile(profileName string) error {
+func (s *serviceClient) addProfile(profileName, managementURL string) error {
 	conn, err := s.getSrvClient(defaultFailTimeout)
 	if err != nil {
 		return fmt.Errorf(getClientFMT, err)
@@ -239,8 +244,9 @@ func (s *serviceClient) addProfile(profileName string) error {
 	}
 
 	_, err = conn.AddProfile(s.ctx, &proto.AddProfileRequest{
-		ProfileName: profileName,
-		Username:    currUser.Username,
+		ProfileName:   profileName,
+		Username:      currUser.Username,
+		ManagementUrl: managementURL,
 	})
 
 	if err != nil {

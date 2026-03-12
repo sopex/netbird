@@ -243,7 +243,7 @@ func (s *ServiceManager) DefaultProfilePath() string {
 	return DefaultConfigPath
 }
 
-func (s *ServiceManager) AddProfile(profileName, username string) error {
+func (s *ServiceManager) AddProfile(profileName, username, managementURL string) error {
 	configDir, err := s.getConfigDir(username)
 	if err != nil {
 		return fmt.Errorf("failed to get config directory: %w", err)
@@ -264,7 +264,7 @@ func (s *ServiceManager) AddProfile(profileName, username string) error {
 		return ErrProfileAlreadyExists
 	}
 
-	cfg, err := createNewConfig(ConfigInput{ConfigPath: profPath})
+	cfg, err := createNewConfig(ConfigInput{ConfigPath: profPath, ManagementURL: managementURL})
 	if err != nil {
 		return fmt.Errorf("failed to create new config: %w", err)
 	}

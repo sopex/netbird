@@ -1536,7 +1536,7 @@ func (s *Server) AddProfile(ctx context.Context, msg *proto.AddProfileRequest) (
 		return nil, gstatus.Errorf(codes.InvalidArgument, "profile name and username must be provided")
 	}
 
-	if err := s.profileManager.AddProfile(msg.ProfileName, msg.Username); err != nil {
+	if err := s.profileManager.AddProfile(msg.ProfileName, msg.Username, msg.ManagementUrl); err != nil {
 		log.Errorf("failed to create profile: %v", err)
 		return nil, fmt.Errorf("failed to create profile: %w", err)
 	}
